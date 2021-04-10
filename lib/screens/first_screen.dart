@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../screens/banner_screen.dart';
 import '../widgets/app_drawer.dart';
 
 class FirstScreen extends StatefulWidget {
@@ -25,6 +26,11 @@ class _FirstScreenState extends State<FirstScreen> {
         ],
       ),
       drawer: AppDrawer(),
+      body: Column(
+        children: [
+          BannerScreen(),
+        ],
+      ),
     );
   }
 }
