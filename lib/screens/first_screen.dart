@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/app_drawer.dart';
+
 class FirstScreen extends StatefulWidget {
   @override
   _FirstScreenState createState() => _FirstScreenState();
@@ -22,6 +24,7 @@ class _FirstScreenState extends State<FirstScreen> {
           )
         ],
       ),
+      drawer: AppDrawer(),
     );
   }
 }
