@@ -9,7 +9,7 @@ class _BannerScreenState extends State<BannerScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text('Test'),
+      child: Text('JustTest'),
     );
   }
 }
