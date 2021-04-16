@@ -1,6 +1,6 @@
 class Api {
   //定義根路徑
-  static const String BASE_URL = 'https:// www2.taimall.com.tw/tmgear/appinfo2.asmx';
+  static const String BASE_URL = 'https://www2.taimall.com.tw/tmgear/appinfo2.asmx';
   //主頁Icon
   static const String HOME_PAGE_ICON = BASE_URL + '/getinfo?&action=homepage&data=201905160000&pid=954f61ce-bae5-41b5-bcc9-12adc0ca3922&version=v2';
   //主頁廣告輪播
