@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 
-
 class BannerItem {
   bool success;
   List<Data> data;
@@ -43,16 +42,3 @@ class Data {
   }
 }
 
-// class Banner with ChangeNotifier {
-//   List<Data> _items = [];
-// Future getBannerData(url) async {
-//   final response = await http.get(url);
-//   if (response.statusCode == 200) {
-//     final data = jsonDecode(response.body);
-//     final bannerDataFromJson = BannerItem.fromJson(data);
-//   } else {
-//     throw Exception('Failed to load Data');
-//   }
-//   // notifyListeners();
-// }
-// }

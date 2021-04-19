@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import 'package:newtaimall/widgets/webviewservice.dart';
 
 import '../config/api.dart';
 import '../providers/banner.dart';
@@ -16,50 +16,70 @@ class _BannerScreenState extends State<BannerScreen> {
   //設置bannerItem列表用來放置banner內資料
   BannerItem bannerItem;
 
-  int index = 0;
-
+  int curIndex = 0;
   //設置banner的Api網址
   final url = Uri.parse(Api.HOME_PAGE_AD);
-
   //設置輪播控制器
   PageController _pageController;
-
   //設置自動輪播定時器
   Timer _timer;
-
-  //設置頁面圖片
-  List _bannerPage = [];
-
+  // //設置頁面圖片
+  // List _bannerPage = [];
   @override
   void initState() {
-
     super.initState();
     getBannerData();
+    _pageController = PageController(initialPage: curIndex);
+    setTimer();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        //設置容器高度為裝置的1/3
-        height: MediaQuery.of(context).size.height / 3,
-        // //設置容器寬度為裝置寬度
-        // width: MediaQuery.of(context).size.width,
-        //對齊方式為置中
-        alignment: Alignment.center,
-        child: PageView.builder(
-          itemCount: bannerItem.data.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return _bannerPage[index % (_bannerPage.length)];
-          },
-        ));
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        buildPageViewWidget(),
+      ],
+    );
   }
   //建立banner顯示畫面
-  buildPageViewWidget(int index) {
-    return InkWell(
-      onTap: () {
-
-      },
+  Widget buildPageViewWidget() {
+    var length = bannerItem.data.length;
+    return Container(
+      //設置容器高度為裝置的1/3
+      height: MediaQuery.of(context).size.height / 3,
+      //設置容器寬度為裝置寬度
+      width: MediaQuery.of(context).size.width,
+      //對齊方式為置中
+      alignment: Alignment.center,
+      child: PageView.builder(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              curIndex = index;
+              if (index == 0) {
+                curIndex = length;
+              }
+            });
+          },
+          itemBuilder: (context, index) {
+            return GestureDetector(
+              onPanDown: (details) {
+                _cancelTimer();
+              },
+              onTap: () {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) => WebViewService(
+                          link: bannerItem.data[index % length].bannerLink,
+                        )));
+                return index;
+              },
+              child: Image.network(
+                bannerItem.data[index % length].bannerImage,
+                fit: BoxFit.cover,
+              ),
+            );
+          }),
     );
   }
   //建立取得廣告資料函數getBannerData
@@ -77,16 +97,25 @@ class _BannerScreenState extends State<BannerScreen> {
       throw Exception('Failed to load Data');
     }
   }
-
   //設置定時器
   setTimer() {
-    _timer = Timer.periodic(Duration(seconds: 3), (t) {
-      index++;
-      _pageController.animateToPage(
-        index,
-        duration: Duration(milliseconds: 300),
-        curve: Curves.linear,
-      );
-    });
+    if (_timer == null) {
+      _timer = Timer.periodic(Duration(seconds: 3), (t) {
+        curIndex++;
+        _pageController.animateToPage(
+          curIndex,
+          duration: Duration(milliseconds: 300),
+          curve: Curves.linear,
+        );
+      });
+    }
+  }
+  //取消定時器
+  _cancelTimer() {
+    if (_timer != null) {
+      _timer.cancel();
+      _timer = null;
+      setTimer();
+    }
   }
 }
