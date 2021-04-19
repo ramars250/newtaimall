@@ -23,7 +23,7 @@ class _BannerScreenState extends State<BannerScreen> {
   PageController _pageController;
   //設置自動輪播定時器
   Timer _timer;
-  // //設置頁面圖片
+  //設置頁面圖片
   // List _bannerPage = [];
   @override
   void initState() {
@@ -72,7 +72,7 @@ class _BannerScreenState extends State<BannerScreen> {
                     builder: (context) => WebViewService(
                           link: bannerItem.data[index % length].bannerLink,
                         )));
-                return index;
+                return curIndex;
               },
               child: Image.network(
                 bannerItem.data[index % length].bannerImage,
@@ -91,7 +91,7 @@ class _BannerScreenState extends State<BannerScreen> {
       Map<String, dynamic> jsonMap = json.decode(response.body);
       bannerItem = BannerItem.fromJson(jsonMap);
       //解析json返回的類別
-      bannerItem.data.forEach((value) => print(bannerItem.data[0].bannerImage));
+      bannerItem.data.forEach((value) => print(bannerItem.data[0].bannerId));
       return bannerItem;
     } else {
       throw Exception('Failed to load Data');
