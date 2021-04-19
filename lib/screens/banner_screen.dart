@@ -24,7 +24,8 @@ class _BannerScreenState extends State<BannerScreen> {
   //設置自動輪播定時器
   Timer _timer;
   //設置頁面圖片
-  // List _bannerPage = [];
+  List _bannerPage = [];
+
   @override
   void initState() {
     super.initState();
