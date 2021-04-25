@@ -61,7 +61,7 @@ class _TopNavigatorState extends State<TopNavigator> {
               }
               return GridView.count(
                 crossAxisCount: 4,
-                padding: EdgeInsets.all(4),
+                padding: EdgeInsets.all(5),
                 children: list,
               );
             },
