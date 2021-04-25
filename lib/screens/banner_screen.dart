@@ -17,22 +17,26 @@ class _BannerScreenState extends State<BannerScreen> {
   List<bannerscreen.BannerData> bannerItem;
 
   int curIndex = 0;
+
   //設置banner的Api網址
   final url = Uri.parse(Api.HOME_PAGE_AD);
+
   //設置輪播控制器
   PageController _pageController;
+
   //設置自動輪播定時器
   Timer _timer;
+
   //設置頁面圖片
-  List _bannerPage = [];
+  // List _bannerPage = [];
 
   @override
   void initState() {
     getBannerData();
     _pageController = PageController(initialPage: curIndex);
     setTimer();
+    _cancelTimer();
     super.initState();
-
   }
 
   @override
@@ -44,13 +48,14 @@ class _BannerScreenState extends State<BannerScreen> {
       ],
     );
   }
+
   //建立banner顯示畫面
   Widget buildPageViewWidget() {
-    print(bannerItem.length);
-    int length = bannerItem.length;
+    // print(bannerItem.length);
+    // int length = bannerItem.length;
     return Container(
       //設置容器高度為裝置的1/3
-      height: MediaQuery.of(context).size.height / 3,
+      height: MediaQuery.of(context).size.height / 3.5,
       //設置容器寬度為裝置寬度
       width: MediaQuery.of(context).size.width,
       //對齊方式為置中
@@ -61,7 +66,7 @@ class _BannerScreenState extends State<BannerScreen> {
             setState(() {
               curIndex = index;
               if (index == 0) {
-                curIndex = length;
+                curIndex = bannerItem.length;
               }
             });
           },
@@ -73,18 +78,19 @@ class _BannerScreenState extends State<BannerScreen> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => WebViewService(
-                          link: bannerItem[index % length].bannerLink,
+                          link: bannerItem[index % bannerItem.length].bannerLink,
                         )));
                 return curIndex;
               },
               child: Image.network(
-                bannerItem[index % length].bannerImage,
+                bannerItem[index % bannerItem.length].bannerImage,
                 fit: BoxFit.cover,
               ),
             );
           }),
     );
   }
+
   //建立取得廣告資料函數getBannerData
   Future getBannerData() async {
     //獲取Api內banner的資料
@@ -92,17 +98,15 @@ class _BannerScreenState extends State<BannerScreen> {
     if (response.statusCode == 200) {
       //獲取json字串並轉為Banner物件
       Map<String, dynamic> jsonMap = json.decode(response.body);
-      setState(() {
-        bannerItem = bannerscreen.BannerItem.fromJson(jsonMap).data;
-        //解析json返回的類別
-        bannerItem.forEach((value) => print(bannerItem));
-      });
-
+      bannerItem = bannerscreen.BannerItem.fromJson(jsonMap).data;
+      //解析json返回的類別
+      bannerItem.forEach((value) => print(bannerItem));
       return bannerItem;
     } else {
       throw Exception('Failed to load Data');
     }
   }
+
   //設置定時器
   setTimer() {
     if (_timer == null) {
@@ -116,6 +120,7 @@ class _BannerScreenState extends State<BannerScreen> {
       });
     }
   }
+
   //取消定時器
   _cancelTimer() {
     if (_timer != null) {

@@ -28,6 +28,7 @@ class _FirstScreenState extends State<FirstScreen> {
       ),
       drawer: AppDrawer(),
       body: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           BannerScreen(),
           TopNavigator(),
