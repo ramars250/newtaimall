@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:newtaimall/widgets/webviewservice.dart';
 
 import '../config/api.dart';
-import '../providers/banner.dart';
+import '../providers/banner.dart' as bannerscreen;
 
 class BannerScreen extends StatefulWidget {
   @override
@@ -14,7 +14,7 @@ class BannerScreen extends StatefulWidget {
 
 class _BannerScreenState extends State<BannerScreen> {
   //設置bannerItem列表用來放置banner內資料
-  BannerItem bannerItem;
+  List<bannerscreen.BannerData> bannerItem;
 
   int curIndex = 0;
   //設置banner的Api網址
@@ -28,10 +28,11 @@ class _BannerScreenState extends State<BannerScreen> {
 
   @override
   void initState() {
-    super.initState();
     getBannerData();
     _pageController = PageController(initialPage: curIndex);
     setTimer();
+    super.initState();
+
   }
 
   @override
@@ -45,7 +46,8 @@ class _BannerScreenState extends State<BannerScreen> {
   }
   //建立banner顯示畫面
   Widget buildPageViewWidget() {
-    var length = bannerItem.data.length;
+    print(bannerItem.length);
+    int length = bannerItem.length;
     return Container(
       //設置容器高度為裝置的1/3
       height: MediaQuery.of(context).size.height / 3,
@@ -71,12 +73,12 @@ class _BannerScreenState extends State<BannerScreen> {
               onTap: () {
                 Navigator.of(context).push(MaterialPageRoute(
                     builder: (context) => WebViewService(
-                          link: bannerItem.data[index % length].bannerLink,
+                          link: bannerItem[index % length].bannerLink,
                         )));
                 return curIndex;
               },
               child: Image.network(
-                bannerItem.data[index % length].bannerImage,
+                bannerItem[index % length].bannerImage,
                 fit: BoxFit.cover,
               ),
             );
@@ -90,9 +92,12 @@ class _BannerScreenState extends State<BannerScreen> {
     if (response.statusCode == 200) {
       //獲取json字串並轉為Banner物件
       Map<String, dynamic> jsonMap = json.decode(response.body);
-      bannerItem = BannerItem.fromJson(jsonMap);
-      //解析json返回的類別
-      bannerItem.data.forEach((value) => print(bannerItem.data[0].bannerId));
+      setState(() {
+        bannerItem = bannerscreen.BannerItem.fromJson(jsonMap).data;
+        //解析json返回的類別
+        bannerItem.forEach((value) => print(bannerItem));
+      });
+
       return bannerItem;
     } else {
       throw Exception('Failed to load Data');

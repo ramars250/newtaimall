@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 
 class BannerItem {
   bool success;
-  List<Data> data;
+  List<BannerData> data;
   String message;
 
   BannerItem({
@@ -12,8 +12,8 @@ class BannerItem {
   });
 
   factory BannerItem.fromJson(Map<String, dynamic> json) {
-    List<Data> dataList = (json['Data'] as List)
-        .map((bannerData) => Data.fromJson(bannerData))
+    List<BannerData> dataList = (json['Data'] as List)
+        .map((bannerData) => BannerData.fromJson(bannerData))
         .toList();
     return BannerItem(
       success: json['Success'],
@@ -23,19 +23,19 @@ class BannerItem {
   }
 }
 
-class Data {
+class BannerData {
   int bannerId;
   String bannerImage;
   String bannerLink;
 
-  Data({
+  BannerData({
     @required this.bannerId,
     @required this.bannerImage,
     @required this.bannerLink,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
+  factory BannerData.fromJson(Map<String, dynamic> json) {
+    return BannerData(
         bannerId: json['banner_id'],
         bannerImage: json['banner_image'],
         bannerLink: json['banner_link']);

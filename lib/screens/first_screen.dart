@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/topnavigator.dart';
 import '../screens/banner_screen.dart';
 import '../widgets/app_drawer.dart';
 
@@ -29,6 +30,7 @@ class _FirstScreenState extends State<FirstScreen> {
       body: Column(
         children: [
           BannerScreen(),
+          TopNavigator(),
         ],
       ),
     );
